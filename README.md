@@ -5,12 +5,9 @@ Updated on 2020-08-23, probably obsolete again within a few months... haha... si
 ### Limitations
 
 - While Svelte now has TS support, `@typescript-eslint` can't read Svelte so we still need to choose between TS and ESLint for those files.
-Personally I find ESLint more valuable since I prefer lightweight view files without much logic anyway.
-
-- This repo also doesn't bother configuring Jest with Svelte support, same reason as above.
-
+_Personally I prefer lightweight view files without much logic to type check, so ESLint seems more valuable._
+- This repo also doesn't bother to configure Jest with Svelte support, same reason as above.
 - `eslint-plugin-svelte3` and `prettier-plugin-svelte` only work separately, not via `eslint-plugin-prettier`.
-
 - This has only been tested with neovim + w0rp/ale, not with vscode.
 
 ### Copy the official template
@@ -23,25 +20,24 @@ node scripts/setupTypescript.js
 
 ### Add ESLint
 
-`yarn add -D eslint eslint-plugin-svelte3 @typescript-eslint/parser @typescript-eslint/eslint-plugin prettier prettier-plugin-svelte eslint-config-prettier eslint-plugin-prettier`
+- `yarn add -D eslint eslint-plugin-svelte3 @typescript-eslint/parser @typescript-eslint/eslint-plugin prettier prettier-plugin-svelte eslint-config-prettier eslint-plugin-prettier`
+- Add `eslintrc.js` and `prettier.config.js` (see repo files).
+- Remove TypeScript syntax from `src/App.svelte`.
+- Add script in `package.json`: `"eslint 'src/**/*.{ts,svelte}'"`.
+- Optionally run `eslint --fix` on files in `src/` and `.js` configs.
 
-See `eslintrc.js` and `prettier.config.js` _(note that we can still use `@typescript-eslint/parser` for `.svelte` files, just not with TS syntax.)_.
-Remove TypeScript syntax from `src/App.svelte`.
-Run `eslint --fix` on files in `src/` and `.js` configs.
-
-Optionally add a script in `package.json`: `"lint": "eslint 'src/**/*.{ts,svelte}'"`.
+_Note that we can still use `@typescript-eslint/parser` for `.svelte` files, just not with TS syntax_
 
 ### Add Jest
 
-`yarn add -D jest @types/jest`
-
-In `tsconfig.json`, add `compilerOptions: { types: [ "jest" ] }`. Also set `env: { jest: true }` for relevant files in `.eslintrc.js`.
+- `yarn add -D jest @types/jest`
+- In `tsconfig.json` add `compilerOptions: { types: [ "jest" ] }`.
+- Set `env: { jest: true }` for relevant files in `.eslintrc.js`.
 
 ESLint now understands the Jest syntax, but Jest will need Babel to run tests written in TypeScript:
 
-`yarn add -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest`
-
-See `babel.config.js`!
+- `yarn add -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest`
+- Add `babel.config.js`.
 
 Now the tests should run, *but the app won't build anymore* unless we set `compilerOptions.types` to `[ "svelte", "jest" ]`.
 
