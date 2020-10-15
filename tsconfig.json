@@ -1,9 +1,9 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
-
   "compilerOptions": {
-    "types": [ "svelte", "jest" ]
+    "types": ["svelte", "jest"]
   },
+
   "include": ["src/**/*"],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
 }

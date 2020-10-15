@@ -1,11 +1,11 @@
-# Svelte TypeScript Rollup ESLint TailwindCSS
+# Svelte TypeScript Rollup ESLint TailwindCSS Jest
 
-Updated on 2020-08-23, probably obsolete again within a few months... haha... sigh.
+Last updated 2020-10-15.
 
 ### Limitations
 
 - While Svelte now has TS support, `@typescript-eslint` can't read Svelte so we still need to choose between TS and ESLint for those files.
-_Personally I prefer lightweight view files without much logic to type check, so ESLint seems more valuable._
+Personally I prefer lightweight view files without much logic to type check, so ESLint seems more valuable.
 - This repo also doesn't bother to configure Jest with Svelte support, same reason as above.
 - `eslint-plugin-svelte3` and `prettier-plugin-svelte` only work separately, not via `eslint-plugin-prettier`.
 - This has only been tested with neovim + w0rp/ale, not with vscode.
@@ -23,10 +23,10 @@ node scripts/setupTypescript.js
 - `yarn add -D eslint eslint-plugin-svelte3 @typescript-eslint/parser @typescript-eslint/eslint-plugin prettier prettier-plugin-svelte eslint-config-prettier eslint-plugin-prettier`
 - Add `eslintrc.js` and `prettier.config.js` (see repo files).
 - Remove TypeScript syntax from `src/App.svelte`.
-- Add script in `package.json`: `"eslint 'src/**/*.{ts,svelte}'"`.
-- Optionally run `eslint --fix` on files in `src/` and `.js` configs.
+- Add script in `package.json`: `"lint": "eslint 'src/**/*.{ts,svelte}'"`.
+- (Later: Run `eslint --fix` on files in `src/` and `.js` configs.)
 
-_Note that we can still use `@typescript-eslint/parser` for `.svelte` files, just not with TS syntax_
+`@typescript-eslint/parser` works for `.svelte` files, just not with TS syntax. Or maybe the Svelte plugin overrides it...
 
 ### Add Jest
 
@@ -51,11 +51,11 @@ Interesting choice here between:
 
 - Remove `public/global.css` and the link to it in `public/index.html`.
 - Create `postcss.config.js` as in the repo.
-- `yarn add -D tailwindcss postcss` _(and `autoprefixer` and `cssnano` if you want them, otherwise remove from the config)_
-- `rollup.config.js`: `sveltePreprocess()` -> `sveltePreprocess({ postcss: true })`. _(Set `true` to have it load `postcss.config.js` instead of an inline config object.)_
+- `yarn add -D tailwindcss postcss` (and `autoprefixer` and `cssnano` if you need them, otherwise remove from the PostCSS config)
+- `rollup.config.js`: Change `css.write` to `public/build/bundle.css`, and `sveltePreprocess()` to `sveltePreprocess({ postcss: true })`. Setting `true` makes it use `postcss.config.js` instead of an inline config object.
 - Rollup will now require `postcss-load-config` to load the config so install that too.
 - `npx tailwindcss init` and set `purge` paths in `tailwind.config.js`.
-- In `package.json scripts.build` append `--environment NODE_ENV:production`. _(Note that in the configs for Rollup and PostCSS we look at `ROLLUP_WATCH`, but the Tailwind CSS plugin uses `NODE_ENV` to control PurgeCSS!)_
+- In `package.json scripts.build` append `--environment NODE_ENV:production`. *Note*: Rollup and PostCSS configs look at `ROLLUP_WATCH`, but the Tailwind CSS plugin uses `NODE_ENV` to control PurgeCSS!
 - Wrap the `@tailwind base;` stuff in a Svelte component with `<style global>` and import in `App.svelte`.
 
 _(Note to self: when debugging Rollup/PostCSS we can add console prints in `postcss.config.js` by returning a function or wrapping values in lambdas, but `tailwind.config.js` seems to silently ignore the config file if you try this.)_
@@ -63,7 +63,7 @@ _(Note to self: when debugging Rollup/PostCSS we can add console prints in `post
 ### Todo
 
 - Source map warning
-- babel, browserlist, polyfills
+- transpiling output with Babel, polyfills, browserlist
 
 --------------------------------
 #### Everything below is from the original README
