@@ -52,7 +52,7 @@ Interesting choice here between:
 - Remove `public/global.css` and the link to it in `public/index.html`.
 - Create `postcss.config.js` as in the repo.
 - `yarn add -D tailwindcss postcss` (and `autoprefixer` and `cssnano` if you need them, otherwise remove from the PostCSS config)
-- `rollup.config.js`: Change `css.write` to `public/build/bundle.css`, and `sveltePreprocess()` to `sveltePreprocess({ postcss: true })`. Setting `true` makes it use `postcss.config.js` instead of an inline config object.
+- `rollup.config.js`: Change `sveltePreprocess()` to `sveltePreprocess({ postcss: true })`. Setting `true` makes it use `postcss.config.js` instead of an inline config object.
 - Rollup will now require `postcss-load-config` to load the config so install that too.
 - `npx tailwindcss init` and set `purge` paths in `tailwind.config.js`.
 - In `package.json scripts.build` append `--environment NODE_ENV:production`. *Note*: Rollup and PostCSS configs look at `ROLLUP_WATCH`, but the Tailwind CSS plugin uses `NODE_ENV` to control PurgeCSS!
