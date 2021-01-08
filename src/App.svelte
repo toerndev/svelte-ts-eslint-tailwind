@@ -1,16 +1,5 @@
-<style>
-  main {
-    @apply p-4;
-  }
-  h1,
-  p {
-    @apply text-gray-600;
-  }
-</style>
-
 <script>
   import TailwindCSS from './style/TailwindCSS.svelte';
-
   export let name;
 </script>
 
@@ -19,9 +8,21 @@
   <h1 class="text-3xl font-bold">Hello {name}!</h1>
   <p>
     Visit the
-    <a class="text-blue-600" href="https://svelte.dev/tutorial">
-      Svelte tutorial
-    </a>
-    to learn how to build Svelte apps.
+    <a href="https://svelte.dev/tutorial">Svelte tutorial</a>
+    or the <a href="https://tailwindcss.com/docs">Tailwind CSS docs</a>
+    to learn how to build apps.
   </p>
 </main>
+
+<style>
+  main {
+    @apply p-4;
+  }
+  h1,
+  p {
+    @apply text-gray-600;
+  }
+  a {
+    @apply text-blue-600 underline;
+  }
+</style>

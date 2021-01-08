@@ -1,14 +1,25 @@
 # Svelte TypeScript Rollup ESLint TailwindCSS Jest
 
-Last updated 2020-10-15.
+Last updated 2021-01-08.
 
 ### Limitations
 
-- While Svelte now has TS support, `@typescript-eslint` can't read Svelte so we still need to choose between TS and ESLint for those files.
-Personally I prefer lightweight view files without much logic to type check, so ESLint seems more valuable.
-- This repo also doesn't bother to configure Jest with Svelte support, same reason as above.
+- We need to choose between TypeScript and ESLint for .svelte files, because `@typescript-eslint/parser` and `eslint-plugin-svelte3` work independently.
+Personally I find ESLint more valuable since I prefer lightweight view files with as little to type check as possible.
+- This starter doesn't configure Jest with Svelte support, again because logic should be separate from views anyway.
 - `eslint-plugin-svelte3` and `prettier-plugin-svelte` only work separately, not via `eslint-plugin-prettier`.
-- This has only been tested with neovim + w0rp/ale, not with vscode.
+- This has been tested with neovim + w0rp/ale, not with vscode or other editors.
+
+### Usage
+
+```
+npx degit toerndev/svelte-ts-eslint-tailwind my-app
+cd my-app
+yarn
+yarn dev
+```
+
+# _Or_ recreate this starter from scratch like this:
 
 ### Copy the official template
 
@@ -24,104 +35,52 @@ node scripts/setupTypescript.js
 - Add `eslintrc.js` and `prettier.config.js` (see repo files).
 - Remove TypeScript syntax from `src/App.svelte`.
 - Add script in `package.json`: `"lint": "eslint 'src/**/*.{ts,svelte}'"`.
-- (Later: Run `eslint --fix` on files in `src/` and `.js` configs.)
 
-`@typescript-eslint/parser` works for `.svelte` files, just not with TS syntax. Or maybe the Svelte plugin overrides it...
+Svelte's ESLint plugin won't accept TypeScript syntax.
 
 ### Add Jest
 
 - `yarn add -D jest @types/jest`
-- In `tsconfig.json` add `compilerOptions: { types: [ "jest" ] }`.
-- Set `env: { jest: true }` for relevant files in `.eslintrc.js`.
+- `package.json` script: `"test": "jest"`
+- In `tsconfig.json` add `compilerOptions: { types: [ "jest" ] }` so tsc understands Jest.
+- But overriding `compilerOptions.types` breaks the app build, change to `[ "svelte", "jest" ]` to fix it.
+- Set `env: { jest: true }` for relevant files in `.eslintrc.js` so ESLint understands Jest.
 
-ESLint now understands the Jest syntax, but Jest will need Babel to run tests written in TypeScript:
+Jest will also need Babel to run tests written in TypeScript, so
 
 - `yarn add -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest`
 - Add `babel.config.js`.
 
-Now the tests should run, *but the app won't build anymore* unless we set `compilerOptions.types` to `[ "svelte", "jest" ]`.
-
 ### Tailwind CSS
 
-Interesting choice here between:
-1. Use `npm-run-all` and `postcss-cli` to generate and minify CSS separately from Rollup.
-2. Have Rollup run `postcss`, requiring only one process and generating a single CSS bundle including component styles.
+This gets interesting because one can either generate and process Tailwind's CSS separately
+from Rollup (`npm-run-all` + `postcss-cli`), or have Rollup run PostCSS... which can also act as a preprocessor with `postcss-import`!
 
-**(2)** feels cleaner and it also lets us use `@apply` in `<style>` tags, not sure if **(1)** can do this? However regeneration of styles seems to take longer with **(2)**.
+This choice affects build/dev performance. I've gone with the Rollup-integrated approach which is
+probably slower but seemed cleaner. It lets us use Tailwind's `@apply` directive inside `<style>` tags in .svelte files.
+I also use `postcss-import` because it's recommended in the Tailwind CSS docs.
 
 - Remove `public/global.css` and the link to it in `public/index.html`.
 - Create `postcss.config.js` as in the repo.
-- `yarn add -D tailwindcss postcss` (and `autoprefixer` and `cssnano` if you need them, otherwise remove from the PostCSS config)
-- `rollup.config.js`: Change `sveltePreprocess()` to `sveltePreprocess({ postcss: true })`. Setting `true` makes it use `postcss.config.js` instead of an inline config object.
-- Rollup will now require `postcss-load-config` to load the config so install that too.
-- `npx tailwindcss init` and set `purge` paths in `tailwind.config.js`.
-- In `package.json scripts.build` append `--environment NODE_ENV:production`. *Note*: Rollup and PostCSS configs look at `ROLLUP_WATCH`, but the Tailwind CSS plugin uses `NODE_ENV` to control PurgeCSS!
-- Wrap the `@tailwind base;` stuff in a Svelte component with `<style global>` and import in `App.svelte`.
+- `yarn add -D tailwindcss postcss postcss-import autoprefixer cssnano`.
+- `rollup.config.js`: Change `sveltePreprocess()` to `sveltePreprocess({ postcss: true })`. Setting `true` instead of an inline config makes it look for a PostCSS config file to load.
+- However it will require `postcss-load-config` to do so, so install that. If there are errors in the PostCSS config Rollup will keep saying that `postcss-load-config` isn't installed... :-)
+- `npx tailwindcss init` and set `purge.content` paths in `tailwind.config.js`.
+- By default Tailwind CSS looks at `NODE_ENV` to control PurgeCSS, so to improve dev performance either
+  - append `--environment NODE_ENV:production` in `package.json scripts.build`, or
+  - set `purge.enabled` to `!process.env.ROLLUP_WATCH` (same as the Rollup and PostCSS configs).
+- Wrap the `@tailwind base;` stuff in a Svelte component with `<style global lang="postcss">` and import in `App.svelte`. If using `postcss-import` change the syntax to `@import 'tailwindcss/base'`.
 
 _(Note to self: when debugging Rollup/PostCSS we can add console prints in `postcss.config.js` by returning a function or wrapping values in lambdas, but `tailwind.config.js` seems to silently ignore the config file if you try this.)_
 
+### Other
+
+- The template has an annoying source map warning because Rollup's setting conflicts with that of the TypeScript plugin in `rollup.config.js`.
+`typescript({ sourceMap: !production })` overrides `tsconfig.json`, but when this is `false` and `output.sourcemap` is still true it shows the error.
+Change to `{ sourcemap: !production }` for `output` too to fix this.
+- To prevent sirv from clearing the terminal in dev mode (before you can see any messages), launch it with `--no-clear`.
+
 ### Todo
 
-- Source map warning
-- transpiling output with Babel, polyfills, browserlist
+- Transpiling output with Babel before/after Rollup, polyfills, browserlist
 
---------------------------------
-#### Everything below is from the original README
---------------------------------
-
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
-By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
-
-
-## Building and running in production mode
-
-To create an optimised version of the app:
-
-```bash
-npm run build
-```
-
-You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
-
-
-## Single-page app mode
-
-By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
-
-If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for *any* path. You can make it so by editing the `"start"` command in package.json:
-
-```js
-"start": "sirv public --single"
-```
-
-## Deploying to the web
-
-### With [Vercel](https://vercel.com)
-
-Install `vercel` if you haven't already:
-
-```bash
-npm install -g vercel
-```
-
-Then, from within your project folder:
-
-```bash
-cd public
-vercel deploy --name my-project
-```
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public my-project.surge.sh
-```

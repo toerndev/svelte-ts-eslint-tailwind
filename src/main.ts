@@ -4,7 +4,7 @@ const app = new App({
   target: document.body,
 
   props: {
-    name: 'ESLint',
+    name: 'Svelte with TypeScript, ESLint, Tailwind CSS and Jest',
   },
 });
 
