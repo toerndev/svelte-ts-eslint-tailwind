@@ -3,7 +3,7 @@
 ### Changes & current state
 
 - Updated on 2021-08-21
-- Thanks to @ota-meshi's ESLint plugin the setup has become simpler and we get to have TypeScript, linting and prettier at the same time in .svelte files.
+- Thanks to [@ota-meshi](https://github.com/ota-meshi)'s ESLint plugin the setup has become simpler and we get to have TypeScript, linting and prettier at the same time in .svelte files.
 - Type checking doesn't seem to work in .svelte files, only parsing. Probably a configuration error on my part.
 - This has still only been tested with **neovim** and **w0rp/ale**. Feel free to PR if something is needed for **vscode**.
 
@@ -32,18 +32,18 @@ npm install
 - `npm i -D eslint prettier eslint-config-prettier eslint-plugin-prettier @ota-meshi/eslint-plugin-svelte svelte-eslint-parser prettier-plugin-svelte @typescript-eslint/eslint-plugin @typescript-eslint/parser`
 
 *Note:* this isn't the official Svelte plugin for ESLint.
+
 I'm not sure what the state of the official ESLint plugin is nowadays, but it used to be fundamentally incompatible with TypeScript.
-Now the people behind the *beautiful* `vue-eslint-parser` (who are also ESLint maintainers) are creating a similar solution for Svelte which is fantastic.
-With this plugin we can configure the Svelte ESLint plugin to use @typescript-eslint for TS files.
+Great news - the people behind the *beautiful* `vue-eslint-parser` who are also ESLint maintainers are creating a similar solution for Svelte,
+i.e. an AST-based approach.
+This plugin lets us configure it to use `@typescript-eslint` as parser.
 
 - Add `eslintrc.js` and `prettier.config.js` (see repo files).
-- Remove TypeScript syntax from `src/App.svelte`.
 - Add script in `package.json`: `"lint": "eslint 'src/**/*.{ts,svelte}'"`.
 
 ### Tailwind CSS
 
-This solution makes Rollup run PostCSS rather than processing CSS in parallell.
-I think it's probably the slower way, however it works and we can use `@apply` directives inside Svelte `<style>` tags.
+This supports using `@apply` directives in Svelte `<style>` tags.
 
 - Remove `public/global.css` and the link to it in `public/index.html`.
 - Create `postcss.config.js` as in the repo.
@@ -51,7 +51,7 @@ I think it's probably the slower way, however it works and we can use `@apply` d
 - `rollup.config.js`: In the `sveltePreprocess()` args, add `{ postcss: true }`. Using `true` instead of an inline config makes it load an external config file.
 - `npm i -D postcss-load-config` in order to support the above config loading. If Rollup keeps saying that this isn't installed, check the PostCSS config for errors! :-)
 - `npx tailwindcss init` and set `purge.content` paths in `tailwind.config.js`.
-- Tailwind CSS looks at `NODE_ENV` to control PurgeCSS, but this setup uses `!process.env.ROLLUP_WATCH`. So either:
+- Rollup setups use `!process.env.ROLLUP_WATCH` but Tailwind normally looks as `NODE_ENV` to control PurgeCSS. Do one of:
   - pass `--environment NODE_ENV:production` from the build script
   - set `purge.enabled` to `!process.env.ROLLUP_WATCH` (same as the Rollup and PostCSS configs).
 - Wrap the `@tailwind base;` stuff in a Svelte component with `<style global lang="postcss">` and import in `App.svelte`. If using `postcss-import` change the syntax to `@import 'tailwindcss/base'`.
@@ -75,7 +75,7 @@ Jest will also need Babel to run tests written in TypeScript, so
 ### Other
 
 - Annoying source map warning: In `rollup.config.js` there's a conflict between `output.sourcemap` and `plugins.typescript.sourceMap` when in dev mode.
-Change to `{ sourcemap: !production }` for `output` too.
+Change the former to `!production` too to get rid of it.
 
 ### Todo
 
