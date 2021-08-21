@@ -60,7 +60,7 @@ _(Note: when debugging Rollup/PostCSS we can add console prints in `postcss.conf
 
 ### Add Jest
 
-- `yarn add -D jest @types/jest`
+- `npm i -D jest @types/jest`
 - `package.json` script: `"test": "jest"`
 - In `tsconfig.json` add `compilerOptions: { types: [ "jest" ] }` so tsc understands Jest.
 - But overriding `compilerOptions.types` breaks the app build! Change to `[ "svelte", "jest" ]` to fix it.
@@ -68,7 +68,7 @@ _(Note: when debugging Rollup/PostCSS we can add console prints in `postcss.conf
 
 Jest will also need Babel to run tests written in TypeScript, so
 
-- `yarn add -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest`
+- `npm i -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest`
 - Add `babel.config.js`.
 
 
