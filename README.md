@@ -3,9 +3,9 @@
 ### Changes & current state
 
 Updated on 2022-02-13
-- Still uses @ota-meshi's alternative ESLint plugins and eslint-plugin-prettier.
-  Type-checking doesn't work in .svelte files, same as with the SvelteKit setup. But it accepts TS syntax and it's not a big loss.
-- Tailwind CSS can now be added with `svelte-add` which makes things easier.
+- Still uses @ota-meshi's alternative ESLint plugins, and eslint-plugin-prettier.
+  Type-checking doesn't work in .svelte files, same as with the default setup. But it accepts TS syntax and it's not a big loss.
+- Tailwind CSS can now be added with `svelte-add` which makes things easier. (Well done!)
 - The JIT feature in Tailwind CSS is enabled.
 
 ### Usage
@@ -28,6 +28,7 @@ cd my-app && npm i
 npm i -D @ota-meshi/eslint-plugin-svelte svelte-eslint-parser eslint-plugin-prettier
 npm un eslint-plugin-svelte3
 # Disable the rule 'no-inner-declarations' for .svelte files because it makes no sense
+# Change the default lint and format scripts if you like eslint-plugin-prettier.
 
 npx svelte-add tailwindcss
 # This installs postcss, postcss-load-config, autoprefixer, cssnano and tailwindcss
@@ -49,8 +50,9 @@ npm i -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest
 ### Why the alternative ESLint plugins?
 
 The interaction between syntaxes and tools like Svelte, ESLint, TypeScript, Prettier and Jest is
-pretty delicate.
-I believe that there is a right way to do it, which can be found by looking at `vue-eslint-parser`
-which seems to be largely written by ESLint maintainers. That project is a work of art!
-Svelte has kind of been going it's own way with svelte-checks and workarounds in the linting
-plugins. I'm voting for the standard ESLint way. @ota-meshi's repo is it.
+complex. Bringing TypeScript to Svelte is not only about transpiling and bundling, but about these
+things too.
+I believe that there is a right way to do it, which can be found in the repo `vue-eslint-parser`
+which coincidentally seems to be largely written by ESLint maintainers. @ota-meshi is one of them
+so that's very promising. `vue-eslint-parser` is a work of art!
+Vue and Svelte have very similar file structures, so I'm putting my vote on that. :-)
