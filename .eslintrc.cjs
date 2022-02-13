@@ -4,8 +4,9 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
   },
+  ignorePatterns: ['*.cjs'],
   env: {
-    es6: true,
+    es2017: true,
     node: true, // for config files
   },
   extends: ['eslint:recommended', 'plugin:prettier/recommended'],
@@ -17,6 +18,9 @@ module.exports = {
         parser: '@typescript-eslint/parser',
       },
       env: { browser: true, node: false },
+      rules: {
+        'no-inner-declarations': 'off',
+      },
     },
     {
       files: ['src/**/*.ts', 'src/**/*.js'],
@@ -29,4 +33,4 @@ module.exports = {
       },
     },
   ],
-};
+}

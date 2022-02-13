@@ -1,11 +1,12 @@
-# Svelte TypeScript Rollup ESLint TailwindCSS Jest
+# SvelteKit TypeScript ESLint TailwindCSS Jest
 
 ### Changes & current state
 
-- Updated on 2021-08-21
-- Thanks to [@ota-meshi](https://github.com/ota-meshi)'s ESLint plugin the setup has become simpler and we get to have TypeScript, linting and prettier at the same time in .svelte files.
-- Type checking doesn't seem to work in .svelte files, only parsing. Probably a configuration error on my part.
-- This has still only been tested with **neovim** and **w0rp/ale**. Feel free to PR if something is needed for **vscode**.
+Updated on 2022-02-13
+- Still uses @ota-meshi's alternative ESLint plugins and eslint-plugin-prettier.
+  Type-checking doesn't work in .svelte files, same as with the SvelteKit setup. But it accepts TS syntax and it's not a big loss.
+- Tailwind CSS can now be added with `svelte-add` which makes things easier.
+- The JIT feature in Tailwind CSS is enabled.
 
 ### Usage
 
@@ -16,69 +17,40 @@ npm install
 npm run dev
 ```
 
-# How to recreate
-
-### Copy the official template
+### Recreate from scratch
 
 ```
-npx degit sveltejs/template svelte-typescript-app
-cd svelte-typescript-app
-node scripts/setupTypescript.js
-npm install
+npm init svelte@next my-app
+# Skeleton app with TypeScript and ESLint
+cd my-app && npm i
+
+# ESLint
+npm i -D @ota-meshi/eslint-plugin-svelte svelte-eslint-parser eslint-plugin-prettier
+npm un eslint-plugin-svelte3
+# Disable the rule 'no-inner-declarations' for .svelte files because it makes no sense
+
+npx svelte-add tailwindcss
+# This installs postcss, postcss-load-config, autoprefixer, cssnano and tailwindcss
+# When I run Vite, it tells me that Tailwind's config syntax has changed, so change 'purge'
+# to 'content' and remove 'darkMode' or whatever it tells you to do.
+# Tailwind CSS has instructions for Svelte so check those if necessary.
+
+# Jest
+npm i -D jest @types/jest
+# Jest needs Babel to run tests with TypeScript
+npm i -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest
+
+# In package.json, add script: "test": "jest"
+# In tsconfig.json, add compilerOptions.types: ["svelte", "jest"]
+# Make sure .eslintrc sets env.jest = true for test files
+# Add babel.config.cjs
 ```
 
-### ESLint and Prettier
+### Why the alternative ESLint plugins?
 
-- `npm i -D eslint prettier eslint-config-prettier eslint-plugin-prettier @ota-meshi/eslint-plugin-svelte svelte-eslint-parser prettier-plugin-svelte @typescript-eslint/eslint-plugin @typescript-eslint/parser`
-
-*Note:* this isn't the official Svelte plugin for ESLint.
-
-I'm not sure what the state of the official ESLint plugin is nowadays, but it used to be fundamentally incompatible with TypeScript.
-Great news - the people behind the *beautiful* `vue-eslint-parser` who are also ESLint maintainers are creating a similar solution for Svelte,
-i.e. an AST-based approach.
-This plugin lets us configure it to use `@typescript-eslint` as parser.
-
-- Add `eslintrc.js` and `prettier.config.js` (see repo files).
-- Add script in `package.json`: `"lint": "eslint 'src/**/*.{ts,svelte}'"`.
-
-### Tailwind CSS
-
-This supports using `@apply` directives in Svelte `<style>` tags.
-
-- Remove `public/global.css` and the link to it in `public/index.html`.
-- Create `postcss.config.js` as in the repo.
-- `npm i -D tailwindcss postcss postcss-import autoprefixer cssnano`.
-- `rollup.config.js`: In the `sveltePreprocess()` args, add `{ postcss: true }`. Using `true` instead of an inline config makes it load an external config file.
-- `npm i -D postcss-load-config` in order to support the above config loading. If Rollup keeps saying that this isn't installed, check the PostCSS config for errors! :-)
-- `npx tailwindcss init` and set `purge.content` paths in `tailwind.config.js`.
-- Rollup setups use `!process.env.ROLLUP_WATCH` but Tailwind normally looks as `NODE_ENV` to control PurgeCSS. Do one of:
-  - pass `--environment NODE_ENV:production` from the build script
-  - set `purge.enabled` to `!process.env.ROLLUP_WATCH` (same as the Rollup and PostCSS configs).
-- Wrap the `@tailwind base;` stuff in a Svelte component with `<style global lang="postcss">` and import in `App.svelte`. If using `postcss-import` change the syntax to `@import 'tailwindcss/base'`.
-
-_(Note: when debugging Rollup/PostCSS we can add console prints in `postcss.config.js` by returning a function or wrapping values in lambdas. But `tailwind.config.js` silently ignores the config file if we do this.)_
-
-### Add Jest
-
-- `npm i -D jest @types/jest`
-- `package.json` script: `"test": "jest"`
-- In `tsconfig.json` add `compilerOptions: { types: [ "jest" ] }` so tsc understands Jest.
-- But overriding `compilerOptions.types` breaks the app build! Change to `[ "svelte", "jest" ]` to fix it.
-- Set `env: { jest: true }` for relevant files in `.eslintrc.js` so ESLint understands Jest.
-
-Jest will also need Babel to run tests written in TypeScript, so
-
-- `npm i -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest`
-- Add `babel.config.js`.
-
-
-### Other
-
-- Annoying source map warning: In `rollup.config.js` there's a conflict between `output.sourcemap` and `plugins.typescript.sourceMap` when in dev mode.
-Change the former to `!production` too to get rid of it.
-
-### Todo
-
-- Warning about modules not being bundles
-- Transpiling output with Babel before/after Rollup, polyfills, browserlist
-
+The interaction between syntaxes and tools like Svelte, ESLint, TypeScript, Prettier and Jest is
+pretty delicate.
+I believe that there is a right way to do it, which can be found by looking at `vue-eslint-parser`
+which seems to be largely written by ESLint maintainers. That project is a work of art!
+Svelte has kind of been going it's own way with svelte-checks and workarounds in the linting
+plugins. I'm voting for the standard ESLint way. @ota-meshi's repo is it.
