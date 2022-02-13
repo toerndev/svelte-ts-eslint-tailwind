@@ -21,13 +21,13 @@ npm run dev
 
 ```
 npm init svelte@next my-app
-# Skeleton app with TypeScript and ESLint
+# Choose to generate a skeleton app with TypeScript and ESLint
 cd my-app && npm i
 
 # ESLint
 npm i -D @ota-meshi/eslint-plugin-svelte svelte-eslint-parser eslint-plugin-prettier
 npm un eslint-plugin-svelte3
-# Disable the rule 'no-inner-declarations' for .svelte files because it makes no sense
+# Disable 'no-inner-declarations' and 'no-unused-vars' for .svelte files because they don't work.
 # Change the default lint and format scripts if you like eslint-plugin-prettier.
 
 npx svelte-add tailwindcss

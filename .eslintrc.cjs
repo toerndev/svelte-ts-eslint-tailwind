@@ -20,6 +20,7 @@ module.exports = {
       env: { browser: true, node: false },
       rules: {
         'no-inner-declarations': 'off',
+        'no-unused-vars': 'off',
       },
     },
     {
