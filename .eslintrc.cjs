@@ -21,6 +21,7 @@ module.exports = {
       rules: {
         'no-inner-declarations': 'off',
         'no-unused-vars': 'off',
+        'no-self-assign': 'off'
       },
     },
     {
