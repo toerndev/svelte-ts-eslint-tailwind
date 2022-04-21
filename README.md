@@ -4,8 +4,9 @@
 
 Updated on 2022-04-21
 - Still uses @ota-meshi's alternative ESLint plugins and `eslint-plugin-prettier`.
-- TS support in .svelte files: `@typescript-eslint` and Prettier understand TS syntax, type checking is not available with standard TS tooling but only with `svelte-check`.
+- TS support in .svelte files: `@typescript-eslint` and Prettier understand TS syntax, type checking in `.svelte` files is not available with standard TS tooling but only through `svelte-check`.
 - Tailwind CSS JIT is enabled.
+- Sorts Tailwind class strings with Prettier.
 
 ### Usage
 
