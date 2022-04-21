@@ -5,6 +5,6 @@
 
 <style>
   h1 {
-    @apply text-3xl font-bold underline text-indigo-700;
+    @apply text-3xl font-bold text-indigo-700 underline;
   }
 </style>
