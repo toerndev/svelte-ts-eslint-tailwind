@@ -6,6 +6,7 @@
     "build": "svelte-kit build",
     "package": "svelte-kit package",
     "preview": "svelte-kit preview",
+    "prepare": "svelte-kit sync",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "eslint 'src/**/*.{js,svelte,ts}'",
@@ -13,13 +14,13 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.2",
+    "@babel/core": "^7.17.9",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "^7.16.7",
-    "@ota-meshi/eslint-plugin-svelte": "^0.9.0",
+    "@ota-meshi/eslint-plugin-svelte": "^0.32.1",
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
-    "@types/jest": "^27.4.0",
+    "@types/jest": "^27.4.1",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "autoprefixer": "^10.3.7",
@@ -35,11 +36,11 @@
     "prettier-plugin-svelte": "^2.5.0",
     "svelte": "^3.44.0",
     "svelte-check": "^2.2.6",
-    "svelte-eslint-parser": "^0.15.0",
+    "svelte-eslint-parser": "^0.16.2",
     "svelte-preprocess": "^4.9.8",
     "tailwindcss": "^2.2.16",
     "tslib": "^2.3.1",
-    "typescript": "~4.5.4"
+    "typescript": "~4.6.2"
   },
   "type": "module"
 }

@@ -2,11 +2,10 @@
 
 ### Changes & current state
 
-Updated on 2022-02-13
-- Still uses @ota-meshi's alternative ESLint plugins, and eslint-plugin-prettier.
-  Type-checking doesn't work in .svelte files, same as with the default setup. But it accepts TS syntax and it's not a big loss.
-- Tailwind CSS can now be added with `svelte-add` which makes things easier. (Well done!)
-- The JIT feature in Tailwind CSS is enabled.
+Updated on 2022-04-21
+- Still uses @ota-meshi's alternative ESLint plugins and `eslint-plugin-prettier`.
+- TS support in .svelte files: `@typescript-eslint` and Prettier understand TS syntax, type checking is not available with standard TS tooling but only with `svelte-check`.
+- Tailwind CSS JIT is enabled.
 
 ### Usage
 
@@ -49,10 +48,6 @@ npm i -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest
 
 ### Why the alternative ESLint plugins?
 
-The interaction between syntaxes and tools like Svelte, ESLint, TypeScript, Prettier and Jest is
-complex. Bringing TypeScript to Svelte is not only about transpiling and bundling, but about these
-things too.
-I believe that there is a right way to do it, which can be found in the repo `vue-eslint-parser`
-which coincidentally seems to be largely written by ESLint maintainers. @ota-meshi is one of them
-so that's very promising. `vue-eslint-parser` is a work of art!
-Vue and Svelte have very similar file structures, so I'm putting my vote on that. :-)
+Svelte's recommended way to use ESLint and TypeScript seems non-standard.
+For linting purposes, Vue is very similar to Svelte and their ecosystem has solved this problem beautifully with `vue-eslint-parser`.
+Those guys also seem to be ESLint maintainers. @ota-meshi's solution for Svelte uses the same approach as that.
