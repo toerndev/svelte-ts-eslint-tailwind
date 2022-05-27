@@ -2,7 +2,7 @@
 
 ### Changes & current state
 
-Updated on 2022-04-21
+Updated on 2022-05-27
 - Still uses @ota-meshi's alternative ESLint plugins and `eslint-plugin-prettier`.
 - TS support in .svelte files: `@typescript-eslint` and Prettier understand TS syntax, type checking in `.svelte` files is not available with standard TS tooling but only through `svelte-check`.
 - Tailwind CSS JIT is enabled.
@@ -25,16 +25,16 @@ npm init svelte@next my-app
 cd my-app && npm i
 
 # ESLint
-npm i -D @ota-meshi/eslint-plugin-svelte svelte-eslint-parser eslint-plugin-prettier
+npm i -D @ota-meshi/eslint-plugin-svelte svelte-eslint-parser eslint-plugin-prettier eslint-config-prettier prettier
 npm un eslint-plugin-svelte3
 # Disable 'no-inner-declarations' and 'no-unused-vars' for .svelte files because they don't work.
 # Change the default lint and format scripts if you like eslint-plugin-prettier.
 
 npx svelte-add tailwindcss
+npm i -D prettier-plugin-tailwindcss
 # This installs postcss, postcss-load-config, autoprefixer, cssnano and tailwindcss
-# When I run Vite, it tells me that Tailwind's config syntax has changed, so change 'purge'
-# to 'content' and remove 'darkMode' or whatever it tells you to do.
-# Tailwind CSS has instructions for Svelte so check those if necessary.
+# Try building the app, Vite might tell you that Tailwind's config syntax has changed.
+# If needed, Tailwind CSS has instructions for Svelte.
 
 # Jest
 npm i -D jest @types/jest

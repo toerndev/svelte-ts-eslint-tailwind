@@ -6,6 +6,8 @@ const config = {
     extend: {},
   },
 
+  darkMode: 'media',
+
   plugins: [],
 };
 
