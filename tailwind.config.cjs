@@ -1,12 +1,10 @@
 const config = {
   mode: 'jit',
-  purge: ['./src/**/*.svelte'],
+  content: ['./static/**/*.html', './src/**/*.{js,svelte,ts}'],
 
   theme: {
     extend: {},
   },
-
-  darkMode: 'media',
 
   plugins: [],
 };
