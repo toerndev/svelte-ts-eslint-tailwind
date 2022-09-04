@@ -1,38 +1,20 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaVersion: 2020,
-    sourceType: 'module',
-  },
-  ignorePatterns: ['*.cjs'],
-  env: {
-    es2017: true,
-    node: true, // for config files
-  },
-  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
-  overrides: [
-    {
-      files: ['*.svelte'],
-      parser: 'svelte-eslint-parser',
-      parserOptions: {
-        parser: '@typescript-eslint/parser',
-      },
-      env: { browser: true, node: false },
-      rules: {
-        'no-inner-declarations': 'off',
-        'no-unused-vars': 'off',
-        'no-self-assign': 'off'
-      },
-    },
-    {
-      files: ['src/**/*.ts', 'src/**/*.js'],
-      env: { browser: true, node: false },
-    },
-    {
-      files: ['*.spec.ts'],
-      env: {
-        jest: true,
-      },
-    },
-  ],
-}
+	root: true,
+	parser: '@typescript-eslint/parser',
+	extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+	plugins: ['svelte3', '@typescript-eslint'],
+	ignorePatterns: ['*.cjs'],
+	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
+	settings: {
+		'svelte3/typescript': () => require('typescript')
+	},
+	parserOptions: {
+		sourceType: 'module',
+		ecmaVersion: 2020
+	},
+	env: {
+		browser: true,
+		es2017: true,
+		node: true
+	}
+};
