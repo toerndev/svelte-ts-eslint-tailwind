@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { invalidateAll } from '$app/navigation';
 
 // this action (https://svelte.dev/tutorial/actions) allows us to
