@@ -26,32 +26,21 @@
   <Counter />
 </section>
 
-<style>
+<style lang="postcss">
   section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
+    @apply flex flex-1 flex-col items-center justify-center;
   }
 
   h1 {
-    width: 100%;
+    @apply w-full;
   }
 
   .welcome {
-    display: block;
-    position: relative;
-    width: 100%;
-    height: 0;
+    @apply relative block h-0 w-full;
     padding: 0 0 calc(100% * 495 / 2048) 0;
   }
 
   .welcome img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    display: block;
+    @apply absolute top-0 block h-full w-full;
   }
 </style>

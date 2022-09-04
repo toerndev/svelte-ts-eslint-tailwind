@@ -2,7 +2,7 @@
   import '../app.postcss';
 </script>
 
-<Header />
+<header />
 
 <main>
   <slot />
