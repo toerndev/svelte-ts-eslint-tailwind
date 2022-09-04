@@ -1,38 +1,45 @@
-# create-svelte
+# SvelteKit TypeScript ESLint TailwindCSS
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+### News
 
-## Creating a project
+Updated on 2022-09-04
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Caught up with SvelteKit's big August update with the changes to `load` and how filenames affect routing
+- Removed `eslint-plugin-prettier` (since I now run ESLint and Prettier through LSP)
+- Uses @ota-meshi's alternative ESLint plugins
+- Sorts Tailwind class strings with Prettier.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+### Usage
 
-# create a new project in my-app
-npm create svelte@latest my-app
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
+npx degit toerndev/svelte-ts-eslint-tailwind my-app
+cd my-app
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+### Recreate from scratch
 
-To create a production version of your app:
-
-```bash
-npm run build
 ```
+npm create svelte my-app
 
-You can preview the production build with `npm run preview`.
+# Choose to generate a skeleton app with TypeScript, ESLint and Playwright.
+# Don't add Prettier here because `prettier-plugin-tailwindcss` conflicts with the Svelte plugin.
+# The former bundles the latter to make up for this!
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+cd my-app && npm i
+
+# ESLint
+npm i -D @ota-meshi/eslint-plugin-svelte svelte-eslint-parser eslint-config-prettier prettier
+npm un eslint-plugin-svelte3
+# Disable 'no-inner-declarations' and 'no-self-assign' for .svelte files because they don't work.
+# Get .eslint* and .prettierrc* from this repo.
+# Prettier might not work yet, see above.
+
+npx svelte-add tailwindcss
+npm i -D prettier-plugin-tailwindcss
+
+# This installs postcss, postcss-load-config, autoprefixer, tailwindcss
+# cssnano is not (no longer?) installed by this tool, and didn't make any difference in my tests.
+# The Tailwind CSS documentation still recommends it though.
+```
