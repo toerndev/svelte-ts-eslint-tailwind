@@ -1,11 +1,9 @@
 # SvelteKit TypeScript ESLint TailwindCSS
 
-### News
+### Status
 
-Updated on 2022-09-04
+Updated on 2023-01-08
 
-- Caught up with SvelteKit's big August update with the changes to `load` and how filenames affect routing
-- Removed `eslint-plugin-prettier` (since I now run ESLint and Prettier through LSP)
 - Uses @ota-meshi's alternative ESLint plugins
 - Sorts Tailwind class strings with Prettier.
 
