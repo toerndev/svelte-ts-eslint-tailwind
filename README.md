@@ -2,10 +2,10 @@
 
 ### Status
 
-Updated on 2023-01-08
+Updated on 2023-05-21
 
-- Uses @ota-meshi's alternative ESLint plugins
-- Sorts Tailwind class strings with Prettier.
+- Official template uses @ota-meshi's stuff now, so less stuff to do here.
+- `prettier-plugin-tailwindcss` can co-exist with the svelte plugin now, too.
 
 ### Usage
 
@@ -21,21 +21,21 @@ npm run dev
 ```
 npm create svelte my-app
 
-# Choose to generate a skeleton app with TypeScript, ESLint and Playwright.
-# Don't add Prettier here because `prettier-plugin-tailwindcss` conflicts with the Svelte plugin.
-# The former bundles the latter to make up for this!
+# Choose to generate a skeleton app with TypeScript, ESLint and Prettier.
 
 cd my-app && npm i
 
 # ESLint
-npm i -D @ota-meshi/eslint-plugin-svelte svelte-eslint-parser eslint-config-prettier prettier
-npm un eslint-plugin-svelte3
-# Disable 'no-inner-declarations' and 'no-self-assign' for .svelte files because they don't work.
+# Disable 'no-inner-declarations' and 'no-self-assign' for .svelte files because they don't make sense with Svelte.
 # Get .eslint* and .prettierrc* from this repo.
-# Prettier might not work yet, see above.
 
-npx svelte-add tailwindcss
 npm i -D prettier-plugin-tailwindcss
+npx svelte-add tailwindcss
+npm i
+
+# The docs for `prettier-plugin-tailwindcss` say that the option `pluginSearchDirs` may not be enabled together
+# with `prettier-plugin-svelte`. I disable it in `.prettierrc` but the Svelte template's scripts in package.json apply it.
+# And it seems to work...? But good to know.
 
 # This installs postcss, postcss-load-config, autoprefixer, tailwindcss
 # cssnano is not (no longer?) installed by this tool, and didn't make any difference in my tests.
